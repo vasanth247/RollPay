@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Payroll Management</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f0f4f8;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+      width: 90%;
+      max-width: 500px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .description {
+      font-size: 0.95rem;
+      color: #555;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    .check-btn {
+      width: 100%;
+      margin-top: 25px;
+      padding: 12px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .check-btn:hover {
+      background-color: #0056b3;
+    }
+
+    #error {
+      color: red;
+      margin-top: 15px;
+      text-align: center;
+      display: none;
+    }
+
+    table {
+      width: 100%;
+      margin-top: 30px;
+      border-collapse: collapse;
+      text-align: center;
+    }
+
+    caption {
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    th, td {
+      padding: 10px;
+      border: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #f8f9fa;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Payroll Management</h1>
+    <p class="description">
+      Enter the bill amount and the cash given by the customer to calculate the minimum number of notes to return.
+    </p>
+
+    <label for="bill">Enter the bill amount</label>
+    <input type="number" id="bill" class="input-bill" />
+
+    <label for="cash">Cash Given</label>
+    <input type="number" id="cash" class="cash-given" />
+
+    <button class="check-btn" id="btn">Check</button>
+    <p id="error"></p>
+
+    <table>
+      <caption>Return Change</caption>
+      <tr>
+        <th>No of Notes</th>
+        <td class="no-of-notes"></td>
+        <td class="no-of-notes"></td>
+        <td class="no-of-notes"></td>
+        <td class="no-of-notes"></td>
+        <td class="no-of-notes"></td>
+        <td class="no-of-notes"></td>
+        <td class="no-of-notes"></td>
+      </tr>
+      <tr>
+        <th>Notes</th>
+        <td>2000</td>
+        <td>500</td>
+        <td>100</td>
+        <td>20</td>
+        <td>10</td>
+        <td>5</td>
+        <td>1</td>
+      </tr>
+    </table>
+  </div>
+
+  <script>
+    const inputBill = document.getElementById("bill");
+    const cashGiven = document.getElementById("cash");
+    const checkBtn = document.getElementById("btn");
+    const errMsg = document.getElementById("error");
+    const noOfNotes = document.querySelectorAll(".no-of-notes");
+    const notes = [2000, 500, 100, 20, 10, 5, 1];
+
+    function showError(message) {
+      errMsg.style.display = "block";
+      errMsg.textContent = message;
+    }
+
+    function clearError() {
+      errMsg.style.display = "none";
+      errMsg.textContent = "";
+    }
+
+    function clickHandler() {
+      clearError();
+
+      const billAmount = Number(inputBill.value);
+      const cashAmount = Number(cashGiven.value);
+
+      if (billAmount <= 0 || cashAmount <= 0) {
+        showError("Please enter positive numbers for both fields.");
+        return;
+      }
+
+      if (cashAmount < billAmount) {
+        showError("Cash given is less than the bill amount.");
+        return;
+      }
+
+      let remaining = cashAmount - billAmount;
+
+      for (let i = 0; i < notes.length; i++) {
+        const noteCount = Math.floor(remaining / notes[i]);
+        remaining %= notes[i];
+        noOfNotes[i].textContent = noteCount;
+      }
+    }
+
+    checkBtn.addEventListener("click", clickHandler);
+  </script>
+</body>
+</html>
